@@ -6,8 +6,6 @@ import main.KeyHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -130,7 +128,12 @@ public class Player extends Entity {
                 actualImageHead = spriteSheet.getSubimage(xSubImgHead,ySubImgHead, gp.originalTileSize, gp.originalTileSize);
                 actualImageTorso = spriteSheet.getSubimage(xSubImgTorso,ySubImgTorso, gp.originalTileSize, gp.originalTileSize);
                 g2d.drawImage(actualImageTorso, x, y, gp.TileSize, gp.TileSize, null);
-                g2d.drawImage(actualImageHead, x, y, gp.TileSize, gp.TileSize, null);
+                if (spriteNum == 1) {
+                    g2d.drawImage(actualImageHead, x, y+2, gp.TileSize, gp.TileSize, null);
+                }
+                else {
+                    g2d.drawImage(actualImageHead, x, y, gp.TileSize, gp.TileSize, null);
+                }
             }
         }
     }
