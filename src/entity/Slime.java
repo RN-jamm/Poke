@@ -14,16 +14,16 @@ public class Slime extends Entity{
 
     GamePanel gp;
     KeyHandler keyH;
-    BufferedImage actialImage;
+    BufferedImage actualImage;
 
     public Slime(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
-        setDeafultValues();
+        setDefaultValues();
         getSlimeImage();
     }
 
-    public void setDeafultValues(){
+    public void setDefaultValues(){
         x = 0;
         y = 0;
         speed = 2;
@@ -67,7 +67,7 @@ public class Slime extends Entity{
     }
 
     public void draw(Graphics2D g2d) {
-        actialImage = spriteSheet.getSubimage(spriteNum*gp.originalTileSize, 0, gp.originalTileSize, gp.originalTileSize);
-        g2d.drawImage(actialImage, x, y, gp.TileSize, gp.TileSize, null);
+        actualImage = spriteSheet.getSubimage(spriteNum*gp.originalTileSize, 0, gp.originalTileSize, gp.originalTileSize);
+        g2d.drawImage(actualImage, x, y, gp.TileSize, gp.TileSize, null);
     }
 }
