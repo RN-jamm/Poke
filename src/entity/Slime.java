@@ -1,13 +1,12 @@
 package entity;
 
+import help.ImageHelper;
 import main.GamePanel;
 import main.KeyHandler;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+
 
 
 public class Slime extends Entity{
@@ -16,11 +15,11 @@ public class Slime extends Entity{
     KeyHandler keyH;
     BufferedImage actualImage;
 
-    public Slime(GamePanel gp, KeyHandler keyH) {
+    public Slime(GamePanel gp, KeyHandler keyH, String imagePath) {
         this.gp = gp;
         this.keyH = keyH;
         setDefaultValues();
-        getSlimeImage();
+        spriteSheet = ImageHelper.getImageSheet(imagePath);
     }
 
     public void setDefaultValues(){
@@ -29,13 +28,6 @@ public class Slime extends Entity{
         speed = 2;
     }
 
-    public void getSlimeImage() {
-        try {
-            spriteSheet = ImageIO.read(new File("src/sprites/characters/slime.png"));
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void update() {
         if (y < gp.screenHeight && x + gp.TileSize < gp.screenWidth) {

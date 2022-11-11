@@ -1,14 +1,12 @@
 package entity;
 
-import help.ImageModifier;
+import help.ImageHelper;
 import main.GamePanel;
 import main.KeyHandler;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+
 
 public class Player extends Entity {
 
@@ -18,25 +16,17 @@ public class Player extends Entity {
     String direction = "idle";
     int xSubImgHead, ySubImgHead, xSubImgTorso, ySubImgTorso;
 
-    public Player(GamePanel gp, KeyHandler keyH) {
+    public Player(GamePanel gp, KeyHandler keyH, String imagePath) {
         this.gp = gp;
         this.keyH = keyH;
         setDeafultValues();
-        getPlayerImage();
+        spriteSheet = ImageHelper.getImageSheet(imagePath);
     }
 
     public void setDeafultValues() {
         x = gp.screenWidth/2 - gp.TileSize/2;
         y = gp.screenHeight/2 - gp.TileSize/2;
         speed = 4;
-    }
-
-    public void getPlayerImage() {
-        try {
-            spriteSheet = ImageIO.read(new File("src/sprites/characters/Dwarf_Miner_Sprite_Sheet_16x16.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void update() {
@@ -117,8 +107,8 @@ public class Player extends Entity {
                 ySubImgTorso = 48;
                 actualImageHead = spriteSheet.getSubimage(xSubImgHead,ySubImgHead, gp.originalTileSize, gp.originalTileSize);
                 actualImageTorso = spriteSheet.getSubimage(xSubImgTorso,ySubImgTorso, gp.originalTileSize, gp.originalTileSize);
-                g2d.drawImage(ImageModifier.imageReflection(actualImageTorso), x, y, gp.TileSize, gp.TileSize, null);
-                g2d.drawImage(ImageModifier.imageReflection(actualImageHead), x, y, gp.TileSize, gp.TileSize, null);
+                g2d.drawImage(ImageHelper.imageReflection(actualImageTorso), x, y, gp.TileSize, gp.TileSize, null);
+                g2d.drawImage(ImageHelper.imageReflection(actualImageHead), x, y, gp.TileSize, gp.TileSize, null);
             }
             case "idle" -> {
                 xSubImgHead = 96;

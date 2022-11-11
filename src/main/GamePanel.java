@@ -1,5 +1,6 @@
 package main;
 
+import background.TileManager;
 import entity.Player;
 import entity.Slime;
 
@@ -22,13 +23,14 @@ public class GamePanel extends JPanel implements Runnable{
 
     Thread gameThread;
     KeyHandler keyH = new KeyHandler();
-    Player player = new Player(this, keyH);
-    Slime slime = new Slime(this, keyH);
+    Player player = new Player(this, keyH, "res/sprites/characters/Dwarf_Miner_Sprite_Sheet_16x16.png");
+    Slime slime = new Slime(this, keyH, "res/sprites/characters/slime.png");
+    TileManager map01 = new TileManager(this, "res/sprites/background/cavesofgallet_tiles.png");
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setDoubleBuffered(true);
-        this.setBackground(Color.PINK);
+        //this.setBackground(Color.PINK);
         this.addKeyListener(keyH);
         this.setFocusable(true);
     }
@@ -37,32 +39,6 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread = new Thread(this);
         gameThread.start();
     }
-
-//    @Override
-//    public void run() {
-//        double drawInterval = 1000000000/FPS;
-//        double nextDrawTime = System.nanoTime() + drawInterval;
-//        while (gameThread != null) {
-//
-//            //update
-//            update();
-//            //draw
-//            repaint();
-//
-//            try {
-//                double remainingTime = nextDrawTime - System.nanoTime();
-//                remainingTime = remainingTime/1000000;
-//                if (remainingTime < 0) {
-//                    remainingTime = 0;
-//                }
-//                Thread.sleep((long) remainingTime);
-//                nextDrawTime += drawInterval;
-//
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
     @Override
     public void run() {
@@ -95,6 +71,7 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
+        map01.draw(g2d);
         slime.draw(g2d);
         player.draw(g2d);
         g2d.dispose();

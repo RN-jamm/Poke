@@ -1,8 +1,11 @@
 package help;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-public class ImageModifier {
+public class ImageHelper {
 
     public static BufferedImage imageReflection(BufferedImage image) {
         int width = image.getWidth();
@@ -20,5 +23,17 @@ public class ImageModifier {
         }
 
         return reflectedImage;
+    }
+
+
+    public static BufferedImage getImageSheet(String imagePath) {
+        try {
+            BufferedImage imageSheet;
+            imageSheet = ImageIO.read(new File(imagePath));
+            return imageSheet;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
