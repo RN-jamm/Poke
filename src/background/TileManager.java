@@ -21,8 +21,8 @@ public class TileManager {
         tileSheet = ImageHelper.getImageSheet(imagePath);
         tile = new Tile[getTileSize()];
         setTileImages();
-        mapTileNum = new int[gp.maxScreenCol][gp.maxScreenRow];
-        loadMap("res/maps/map01.txt");
+        mapTileNum = new int[gp.maxMapCol][gp.maxMapRow];
+        loadMap("res/maps/map02.txt");
 
     }
 
@@ -63,17 +63,17 @@ public class TileManager {
             int col = 0;
             int row = 0;
 
-            while (col < gp.maxScreenCol && row < gp.maxScreenRow) {
+            while (col < gp.maxMapCol && row < gp.maxMapRow) {
 
                 String line = br.readLine();
 
-                while (col < gp.maxScreenCol) {
+                while (col < gp.maxMapCol) {
                     String[] numbers = line.split(" ");
                     int num = Integer.parseInt(numbers[col]);
                     mapTileNum[col][row] = num;
                     col++;
                 }
-                if (col == gp.maxScreenCol) {
+                if (col == gp.maxMapCol) {
                     col = 0;
                     row++;
                 }
@@ -86,22 +86,29 @@ public class TileManager {
 
     public void draw(Graphics2D g2) {
 
-        int col = 0;
-        int row = 0;
-        int x = 0;
-        int y = 0;
+        int mapCol = (gp.player.worldX - gp.screenWidth/2) / gp.TileSize*2;
+        int mapRow = (gp.player.worldY - gp.screenHeight/2) / gp.TileSize*2;
 
-        while (col < gp.maxScreenCol && row < gp.maxScreenRow) {
-            int currentMapNum = mapTileNum[col][row];
-            g2.drawImage(tile[currentMapNum].image, x, y, gp.TileSize, gp.TileSize, null);
-            col++;
-            x += gp.TileSize;
+        int Col = -1;
+        int Row = -1;
 
-            if (col == gp.maxScreenCol) {
-                col = 0;
-                x = 0;
-                row++;
-                y += gp.TileSize;
+        while (Col <= gp.maxScreenCol +1 && Row <= gp.maxScreenRow +1) {
+
+            int worldX = mapCol * gp.TileSize/2;
+            int worldY = mapRow * gp.TileSize/2;
+            int screenX = worldX - gp.player.worldX + gp.player.screenX;
+            int screenY = worldY - gp.player.worldY + gp.player.screenY;
+
+            int currentMapNum = mapTileNum[mapCol][mapRow];
+            g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize/2, gp.TileSize/2, null);
+            mapCol++;
+            Col++;
+
+            if (Col == gp.maxScreenCol +2){
+                mapCol = (gp.player.worldX - gp.screenWidth/2) / gp.TileSize*2;
+                Col = -1;
+                mapRow++;
+                Row++;
             }
         }
     }

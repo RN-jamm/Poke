@@ -23,23 +23,23 @@ public class Slime extends Entity{
     }
 
     public void setDefaultValues(){
-        x = 0;
-        y = 0;
+        worldX = 0;
+        worldY = 0;
         speed = 2;
     }
 
 
     public void update() {
-        if (y < gp.screenHeight && x + gp.TileSize < gp.screenWidth) {
-            x += speed;
+        if (worldY < gp.screenHeight && worldX + gp.TileSize < gp.screenWidth) {
+            worldX += speed;
         }
-        else if(y < gp.screenHeight) {
-            x = 2;
-            y += gp.TileSize;
+        else if(worldY < gp.screenHeight) {
+            worldX = 2;
+            worldY += gp.TileSize;
         }
         else {
-            x = 2;
-            y = 2;
+            worldX = 2;
+            worldY = 2;
         }
 
         spriteCounter++;
@@ -60,6 +60,6 @@ public class Slime extends Entity{
 
     public void draw(Graphics2D g2d) {
         actualImage = spriteSheet.getSubimage(spriteNum*gp.originalTileSize, 0, gp.originalTileSize, gp.originalTileSize);
-        g2d.drawImage(actualImage, x, y, gp.TileSize, gp.TileSize, null);
+        g2d.drawImage(actualImage, worldX, worldY, gp.TileSize, gp.TileSize, null);
     }
 }
