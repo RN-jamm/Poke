@@ -36,4 +36,39 @@ public class ImageHelper {
         }
         return null;
     }
+
+    public static boolean compareTwoImages(BufferedImage img1, BufferedImage img2)
+    {
+        int width1 = img1.getWidth();
+        int width2 = img2.getWidth();
+        int height1 = img1.getHeight();
+        int height2 = img2.getHeight();
+
+        // Checking whether the images are of same size or not
+        if ((width1 != width2) || (height1 != height2)) {
+            return false;
+        }
+
+        // Outer loop for rows(height)
+        for (int y = 0; y < height1; y++) {
+
+            // Inner loop for columns(width)
+            for (int x = 0; x < width1; x++) {
+
+                int rgbA = img1.getRGB(x, y);
+                int rgbB = img2.getRGB(x, y);
+                int redA = (rgbA >> 16) & 0xff;
+                int greenA = (rgbA >> 8) & 0xff;
+                int blueA = (rgbA)&0xff;
+                int redB = (rgbB >> 16) & 0xff;
+                int greenB = (rgbB >> 8) & 0xff;
+                int blueB = (rgbB)&0xff;
+
+                if (redA != redB || greenA != greenB || blueA != blueB) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

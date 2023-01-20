@@ -3,6 +3,7 @@ package background;
 import help.ImageHelper;
 import main.GamePanel;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -22,7 +23,12 @@ public class TileManager {
         tile = new Tile[getTileSize()];
         setTileImages();
         mapTileNum = new int[gp.maxMapCol][gp.maxMapRow];
-        loadMap("res/maps/map02.txt");
+//        loadMap("res/maps/map02.txt");
+        try {
+            imgToMap("res/sprites/background/cavesofgallet.png");
+        } catch (Exception e) {
+            //TODO
+        }
 
     }
 
@@ -84,28 +90,57 @@ public class TileManager {
         }
     }
 
+    public void imgToMap(String mapImgPath) {
+        try {
+            BufferedImage mapImg, imgBlock;
+            mapImg = ImageIO.read(new File(mapImgPath));
+
+            int col = 0;
+            int row = 0;
+
+            while (col < gp.maxMapCol/gp.scale && row < gp.maxMapRow/gp.scale) {
+                while (col < gp.maxMapCol/gp.scale) {
+                    imgBlock = mapImg.getSubimage(col*8, row*8, 8, 8);
+                    for (int i=0; i< tile.length; i++) {
+                        if (ImageHelper.compareTwoImages(tile[i].image, imgBlock)) {
+                            mapTileNum[col][row] = i;
+                            break;
+                        }
+                    }
+                    col++;
+                }
+                if (col == gp.maxMapCol/gp.scale) {
+                    col = 0;
+                    row++;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void draw(Graphics2D g2) {
 
-        int mapCol = (gp.player.worldX - gp.screenWidth/2) / gp.TileSize*2;
-        int mapRow = (gp.player.worldY - gp.screenHeight/2) / gp.TileSize*2;
+        int mapCol = (gp.player.worldX - gp.screenWidth/2) / gp.TileSize;
+        int mapRow = (gp.player.worldY - gp.screenHeight/2) / gp.TileSize;
 
         int Col = -1;
         int Row = -1;
 
         while (Col <= gp.maxScreenCol +1 && Row <= gp.maxScreenRow +1) {
 
-            int worldX = mapCol * gp.TileSize/2;
-            int worldY = mapRow * gp.TileSize/2;
+            int worldX = mapCol * gp.TileSize;
+            int worldY = mapRow * gp.TileSize;
             int screenX = worldX - gp.player.worldX + gp.player.screenX;
             int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
             int currentMapNum = mapTileNum[mapCol][mapRow];
-            g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize/2, gp.TileSize/2, null);
+            g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
             mapCol++;
             Col++;
 
             if (Col == gp.maxScreenCol +2){
-                mapCol = (gp.player.worldX - gp.screenWidth/2) / gp.TileSize*2;
+                mapCol = (gp.player.worldX - gp.screenWidth/2) / gp.TileSize;
                 Col = -1;
                 mapRow++;
                 Row++;

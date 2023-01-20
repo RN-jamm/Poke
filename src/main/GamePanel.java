@@ -16,8 +16,8 @@ public class GamePanel extends JPanel implements Runnable{
     public final int maxScreenCol = 32;
     public final int maxScreenRow = 24;
 
-    public final int maxMapCol = 160;
-    public final int maxMapRow = 120;
+    public final int maxMapCol = 192;
+    public final int maxMapRow = 108;
 
     public final int mapWidth = TileSize * maxMapCol/2;
     public final int mapHeight = TileSize * maxMapRow/2;
@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements Runnable{
     Thread gameThread;
     KeyHandler keyH = new KeyHandler();
     public Player player = new Player(this, keyH, "res/sprites/characters/Dwarf_Miner_Sprite_Sheet_16x16.png");
-    Slime slime = new Slime(this, keyH, "res/sprites/characters/slime.png");
+    Slime slime = new Slime(this, "res/sprites/characters/slime.png");
     TileManager map01 = new TileManager(this, "res/sprites/background/cavesofgallet_tiles.png");
 
     public GamePanel() {

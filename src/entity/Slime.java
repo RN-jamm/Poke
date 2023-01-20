@@ -12,12 +12,11 @@ import java.awt.image.BufferedImage;
 public class Slime extends Entity{
 
     GamePanel gp;
-    KeyHandler keyH;
     BufferedImage actualImage;
 
-    public Slime(GamePanel gp, KeyHandler keyH, String imagePath) {
+    public Slime(GamePanel gp, String imagePath) {
         this.gp = gp;
-        this.keyH = keyH;
+
         setDefaultValues();
         spriteSheet = ImageHelper.getImageSheet(imagePath);
     }
