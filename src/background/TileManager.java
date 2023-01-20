@@ -22,7 +22,7 @@ public class TileManager {
         tileSheet = ImageHelper.getImageSheet(imagePath);
         tile = new Tile[getTileSize()];
         setTileImages();
-        mapTileNum = new int[gp.maxMapCol][gp.maxMapRow];
+        mapTileNum = new int[gp.maxMapRow][gp.maxMapCol];
 //        loadMap("res/maps/map02.txt");
         try {
             imgToMap("res/sprites/background/cavesofgallet.png");
@@ -98,21 +98,35 @@ public class TileManager {
             int col = 0;
             int row = 0;
 
-            while (col < gp.maxMapCol/gp.scale && row < gp.maxMapRow/gp.scale) {
-                while (col < gp.maxMapCol/gp.scale) {
+            while (col < gp.maxMapCol && row < gp.maxMapRow) {
+                while (col < gp.maxMapCol) {
                     imgBlock = mapImg.getSubimage(col*8, row*8, 8, 8);
                     for (int i=0; i< tile.length; i++) {
                         if (ImageHelper.compareTwoImages(tile[i].image, imgBlock)) {
-                            mapTileNum[col][row] = i;
+                            mapTileNum[row][col] = i;
                             break;
                         }
                     }
                     col++;
                 }
-                if (col == gp.maxMapCol/gp.scale) {
+                if (col == gp.maxMapCol) {
                     col = 0;
                     row++;
                 }
+            }
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter("res/maps/mapTest"));
+                String line = "";
+                for (int[] num : mapTileNum) {
+                    for (int n : num) {
+                        line += Integer.toString(n) + " ";
+                    }
+                    writer.write(line);
+                    line = "\n";
+                }
+                writer.close();
+            } catch (IOException e ) {
+                System.out.println(e);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,7 +148,7 @@ public class TileManager {
             int screenX = worldX - gp.player.worldX + gp.player.screenX;
             int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-            int currentMapNum = mapTileNum[mapCol][mapRow];
+            int currentMapNum = mapTileNum[mapRow][mapCol];
             g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
             mapCol++;
             Col++;
