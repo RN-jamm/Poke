@@ -32,7 +32,7 @@ public class Player extends Entity {
     public void setDeafultValues() {
         worldX = gp.mapWidth/2 - gp.TileSize/2;
         worldY = gp.mapHeight/2 - gp.TileSize/2;
-        speed = 4;
+        speed = 6;
     }
 
     public void update() {
@@ -40,19 +40,27 @@ public class Player extends Entity {
                 keyH.leftPressed || keyH.rightPressed) {
             if (keyH.upPressed) {
                 direction = "up";
-                worldY -= speed;
+                if (worldY > 0) {
+                    worldY -= speed;
+                } else { worldY = 0; }
             }
             if (keyH.downPressed) {
                 direction = "down";
-                worldY += speed;
+                if (worldY < gp.mapHeight) {
+                    worldY += speed;
+                } else { worldY = gp.mapHeight; }
             }
             if (keyH.leftPressed) {
                 direction = "left";
-                worldX -= speed;
+                if (worldX > 0) {
+                    worldX -= speed;
+                } else { worldX = 0;}
             }
             if (keyH.rightPressed) {
                 direction = "right";
-                worldX += speed;
+                if (worldX < gp.mapWidth) {
+                    worldX += speed;
+                } else { worldX = gp.mapWidth; }
             }
         }
         else {

@@ -135,31 +135,118 @@ public class TileManager {
 
     public void draw(Graphics2D g2) {
 
-        int mapCol = (gp.player.worldX - gp.screenWidth/2) / gp.TileSize;
-        int mapRow = (gp.player.worldY - gp.screenHeight/2) / gp.TileSize;
+        int mapCol = (gp.player.worldX - gp.screenWidth / 2) / gp.TileSize;
+        int mapRow = (gp.player.worldY - gp.screenHeight / 2) / gp.TileSize;
 
         int Col = -1;
         int Row = -1;
 
-        while (Col <= gp.maxScreenCol +1 && Row <= gp.maxScreenRow +1) {
+        if ((mapCol > 0 && mapCol < gp.maxMapCol-1) && (mapRow > 0 && mapRow < gp.maxMapRow-1)) {
+            while (Col <= gp.maxScreenCol + 1 && Row <= gp.maxScreenRow + 1) {
 
-            int worldX = mapCol * gp.TileSize;
-            int worldY = mapRow * gp.TileSize;
-            int screenX = worldX - gp.player.worldX + gp.player.screenX;
-            int screenY = worldY - gp.player.worldY + gp.player.screenY;
+                int worldX = mapCol * gp.TileSize;
+                int worldY = mapRow * gp.TileSize;
+                int screenX = worldX - gp.player.worldX + gp.player.screenX;
+                int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-            int currentMapNum = mapTileNum[mapRow][mapCol];
-            g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
-            mapCol++;
-            Col++;
+                int currentMapNum = mapTileNum[mapRow][mapCol];
+                g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
+                mapCol++;
+                Col++;
 
-            if (Col == gp.maxScreenCol +2){
-                mapCol = (gp.player.worldX - gp.screenWidth/2) / gp.TileSize;
-                Col = -1;
-                mapRow++;
-                Row++;
+                if (Col == gp.maxScreenCol + 2) {
+                    mapCol = (gp.player.worldX - gp.screenWidth / 2) / gp.TileSize;
+                    Col = -1;
+                    mapRow++;
+                    Row++;
+                }
             }
         }
+//        else if ((mapCol <= 0) && (mapRow > 0 && mapRow < gp.maxMapRow)) {
+//            mapCol = 0;
+//            while (Col <= gp.maxScreenCol + 1 && Row <= gp.maxScreenRow + 1) {
+//
+//                int worldX = mapCol * gp.TileSize;
+//                int worldY = mapRow * gp.TileSize;
+//                int screenX = worldX - gp.player.worldX + gp.player.screenX;
+//                int screenY = worldY - gp.player.worldY + gp.player.screenY;
+//
+//                int currentMapNum = mapTileNum[mapRow][mapCol];
+//                g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
+//                mapCol++;
+//                Col++;
+//
+//                if (Col == gp.maxScreenCol + 2) {
+//                    mapCol = 0;
+//                    Col = -1;
+//                    mapRow++;
+//                    Row++;
+//                }
+//            }
+//        } else if ((mapCol >= gp.maxMapCol) && (mapRow > 0 && mapRow < gp.maxMapRow)) {
+//            mapCol = gp.maxMapCol-1;
+//            while (Col <= gp.maxScreenCol + 1 && Row <= gp.maxScreenRow + 1) {
+//
+//                int worldX = mapCol * gp.TileSize;
+//                int worldY = mapRow * gp.TileSize;
+//                int screenX = worldX - gp.player.worldX + gp.player.screenX;
+//                int screenY = worldY - gp.player.worldY + gp.player.screenY;
+//
+//                int currentMapNum = mapTileNum[mapRow][mapCol];
+//                g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
+//                mapCol++;
+//                Col++;
+//
+//                if (Col == gp.maxScreenCol + 1) {
+//                    mapCol = gp.maxMapCol-1;
+//                    Col = -1;
+//                    mapRow++;
+//                    Row++;
+//                }
+//            }
+//        } else if ((mapCol > 0 && mapCol < gp.maxMapCol-1) && (mapRow <= 0)) {
+//            mapRow = 0;
+//            while (Col <= gp.maxScreenCol + 1 && Row <= gp.maxScreenRow + 1) {
+//
+//                int worldX = mapCol * gp.TileSize;
+//                int worldY = mapRow * gp.TileSize;
+//                int screenX = worldX - gp.player.worldX + gp.player.screenX;
+//                int screenY = worldY - gp.player.worldY + gp.player.screenY;
+//
+//                int currentMapNum = mapTileNum[mapRow][mapCol];
+//                g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
+//                mapCol++;
+//                Col++;
+//
+//                if (Col == gp.maxScreenCol + 1) {
+//                    mapCol = (gp.player.worldX - gp.screenWidth / 2) / gp.TileSize;
+//                    Col = -1;
+//                    mapRow++;
+//                    Row++;
+//                }
+//            }
+//        } else if ((mapCol > 0 && mapCol < gp.maxMapCol-1) && (mapRow >= gp.maxMapRow)) {
+//            mapRow = gp.maxMapRow-1;
+//            while (Col <= gp.maxScreenCol + 1 && Row <= gp.maxScreenRow + 1) {
+//
+//                int worldX = mapCol * gp.TileSize;
+//                int worldY = mapRow * gp.TileSize;
+//                int screenX = worldX - gp.player.worldX + gp.player.screenX;
+//                int screenY = worldY - gp.player.worldY + gp.player.screenY;
+//
+//                int currentMapNum = mapTileNum[mapRow][mapCol];
+//                g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
+//                mapCol++;
+//                Col++;
+//
+//                if (Col == gp.maxScreenCol + 1) {
+//                    mapCol = (gp.player.worldX - gp.screenWidth / 2) / gp.TileSize;
+//                    Col = -1;
+//                    mapRow++;
+//                    Row++;
+//                }
+//            }
+//        }
+        // TODO: TO wyzej posprawdzaj i ogarnij + mapFromImg zle dziala chyba. Zle sie renderuja bloki tekstur. Mapa sie nie zgadza. Pomysl: i*8 - 1 ale do podszlifowania
     }
-
 }
