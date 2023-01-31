@@ -36,8 +36,12 @@ public class Player extends Entity {
     }
 
     public void update() {
+        // if any key is pressed then make movement else idle
         if (keyH.upPressed || keyH.downPressed ||
                 keyH.leftPressed || keyH.rightPressed) {
+
+            // if upPressed move and change X/Y or if character hits border then stop on border
+            // same goes for each one
             if (keyH.upPressed) {
                 direction = "up";
                 if (worldY > 0) {
@@ -67,6 +71,7 @@ public class Player extends Entity {
             direction = "idle";
         }
 
+        // animation for idle
         spriteCounter++;
         if (direction.equals("idle")) {
             if (spriteCounter > 25 && spriteCounter < 50) {
@@ -77,6 +82,8 @@ public class Player extends Entity {
                 spriteCounter = 0;
             }
         }
+        // if not idle make animation for movement
+        // (each direction is chosen when detecting pressedKeys)
         else {
             if (spriteCounter > 10 && spriteCounter < 20) {
                 spriteNum = 1;
@@ -121,8 +128,8 @@ public class Player extends Entity {
                 ySubImgTorso = 48;
                 actualImageHead = spriteSheet.getSubimage(xSubImgHead,ySubImgHead, gp.originalTileSize, gp.originalTileSize);
                 actualImageTorso = spriteSheet.getSubimage(xSubImgTorso,ySubImgTorso, gp.originalTileSize, gp.originalTileSize);
-                g2d.drawImage(ImageHelper.imageReflection(actualImageTorso), screenX, screenY, gp.TileSize, gp.TileSize, null);
-                g2d.drawImage(ImageHelper.imageReflection(actualImageHead), screenX, screenY, gp.TileSize, gp.TileSize, null);
+                g2d.drawImage(ImageHelper.imageReflectionHorizontal(actualImageTorso), screenX, screenY, gp.TileSize, gp.TileSize, null);
+                g2d.drawImage(ImageHelper.imageReflectionHorizontal(actualImageHead), screenX, screenY, gp.TileSize, gp.TileSize, null);
             }
             case "idle" -> {
                 xSubImgHead = 96;

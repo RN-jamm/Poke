@@ -19,8 +19,9 @@ public class GamePanel extends JPanel implements Runnable{
     public final int maxMapCol = 64;
     public final int maxMapRow = 36;
 
-    public final int mapWidth = TileSize * maxMapCol;
-    public final int mapHeight = TileSize * maxMapRow;
+    // -1 because indexing from 0 to 63/35 most of the times
+    public final int mapWidth = TileSize * (maxMapCol-1);
+    public final int mapHeight = TileSize * (maxMapRow-1);
 
     public final int screenWidth = TileSize * maxScreenCol;
     public final int screenHeight = TileSize * maxScreenRow;

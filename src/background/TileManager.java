@@ -27,7 +27,7 @@ public class TileManager {
         try {
             imgToMap("res/sprites/background/cavesofgallet.png");
         } catch (Exception e) {
-            //TODO
+            e.printStackTrace();
         }
 
     }
@@ -114,20 +114,20 @@ public class TileManager {
                     row++;
                 }
             }
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter("res/maps/mapTest"));
-                String line = "";
-                for (int[] num : mapTileNum) {
-                    for (int n : num) {
-                        line += Integer.toString(n) + " ";
-                    }
-                    writer.write(line);
-                    line = "\n";
-                }
-                writer.close();
-            } catch (IOException e ) {
-                System.out.println(e);
-            }
+//            try {
+//                BufferedWriter writer = new BufferedWriter(new FileWriter("res/maps/mapTest"));
+//                String line = "";
+//                for (int[] num : mapTileNum) {
+//                    for (int n : num) {
+//                        line += Integer.toString(n) + " ";
+//                    }
+//                    writer.write(line);
+//                    line = "\n";
+//                }
+//                writer.close();
+//            } catch (IOException e ) {
+//                System.out.println(e);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -135,33 +135,53 @@ public class TileManager {
 
     public void draw(Graphics2D g2) {
 
-        int mapCol = (gp.player.worldX - gp.screenWidth / 2) / gp.TileSize;
-        int mapRow = (gp.player.worldY - gp.screenHeight / 2) / gp.TileSize;
+        int worldX, worldY, screenX, screenY;
 
+        // -1 at the end because we want to create map of size 1 bigger from left and up
+        // so it renders better without white squares
+        int mapCol = ((gp.player.worldX - gp.screenWidth / 2) / gp.TileSize ) -1;
+        int mapRow = ((gp.player.worldY - gp.screenHeight / 2) / gp.TileSize ) -1;
+
+
+        // here aswell we need bigger map of 1
         int Col = -1;
         int Row = -1;
+        int currentMapNum;
 
-        if ((mapCol > 0 && mapCol < gp.maxMapCol-1) && (mapRow > 0 && mapRow < gp.maxMapRow-1)) {
-            while (Col <= gp.maxScreenCol + 1 && Row <= gp.maxScreenRow + 1) {
 
-                int worldX = mapCol * gp.TileSize;
-                int worldY = mapRow * gp.TileSize;
-                int screenX = worldX - gp.player.worldX + gp.player.screenX;
-                int screenY = worldY - gp.player.worldY + gp.player.screenY;
+        // render map (outer map is basicTile = tile[0]) |
+        //                                               V
+        // here we need biiger map of 1 for Col and Row and bigger of 1 for mapCol and mapRow
+        while (Col < gp.maxScreenCol + 2 && Row < gp.maxScreenRow + 2) {
 
-                int currentMapNum = mapTileNum[mapRow][mapCol];
-                g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
-                mapCol++;
-                Col++;
+            worldX = mapCol * gp.TileSize;
+            worldY = mapRow * gp.TileSize;
+            screenX = worldX - gp.player.worldX + gp.player.screenX;
+            screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-                if (Col == gp.maxScreenCol + 2) {
-                    mapCol = (gp.player.worldX - gp.screenWidth / 2) / gp.TileSize;
-                    Col = -1;
-                    mapRow++;
-                    Row++;
-                }
+            if ((mapCol < 0 || mapCol >= gp.maxMapCol) || (mapRow < 0 || mapRow >= gp.maxMapRow)) {
+                currentMapNum = 0;
+            } else {
+                currentMapNum = mapTileNum[mapRow][mapCol];
+            }
+            g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
+            mapCol++;
+            Col++;
+
+            // size same as earlier
+            if (Col == gp.maxScreenCol + 2) {
+                mapCol = ((gp.player.worldX - gp.screenWidth / 2) / gp.TileSize ) -1;
+                Col = -1;
+                mapRow++;
+                Row++;
             }
         }
+
+
+        // This whole code is pointless for now but I will leave it just in case I need it in future
+        // when I will try to add more maps
+
+//        // Stoping render of left wall
 //        else if ((mapCol <= 0) && (mapRow > 0 && mapRow < gp.maxMapRow)) {
 //            mapCol = 0;
 //            while (Col <= gp.maxScreenCol + 1 && Row <= gp.maxScreenRow + 1) {
@@ -171,20 +191,27 @@ public class TileManager {
 //                int screenX = worldX - gp.player.worldX + gp.player.screenX;
 //                int screenY = worldY - gp.player.worldY + gp.player.screenY;
 //
-//                int currentMapNum = mapTileNum[mapRow][mapCol];
+//                if ((mapCol < 0 || mapCol > gp.maxMapCol) || (mapRow < 0 || mapRow > gp.maxMapRow)) {
+//                    currentMapNum = 0;
+//                } else {
+//                    currentMapNum = mapTileNum[mapRow][mapCol];
+//                }
 //                g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
 //                mapCol++;
 //                Col++;
 //
-//                if (Col == gp.maxScreenCol + 2) {
+//                if (Col == gp.maxScreenCol + 1) {
 //                    mapCol = 0;
 //                    Col = -1;
 //                    mapRow++;
 //                    Row++;
 //                }
 //            }
-//        } else if ((mapCol >= gp.maxMapCol) && (mapRow > 0 && mapRow < gp.maxMapRow)) {
-//            mapCol = gp.maxMapCol-1;
+//        }
+//
+//        // Stoping render of right wall
+//        else if ((mapCol > gp.maxMapCol) && (mapRow > 0 && mapRow < gp.maxMapRow)) {
+//            mapCol = gp.maxMapCol;
 //            while (Col <= gp.maxScreenCol + 1 && Row <= gp.maxScreenRow + 1) {
 //
 //                int worldX = mapCol * gp.TileSize;
@@ -192,19 +219,25 @@ public class TileManager {
 //                int screenX = worldX - gp.player.worldX + gp.player.screenX;
 //                int screenY = worldY - gp.player.worldY + gp.player.screenY;
 //
-//                int currentMapNum = mapTileNum[mapRow][mapCol];
+//                if ((mapCol < 0 || mapCol > gp.maxMapCol) || (mapRow < 0 || mapRow > gp.maxMapRow)) {
+//                    currentMapNum = 0;
+//                } else {
+//                    currentMapNum = mapTileNum[mapRow][mapCol];
+//                }
 //                g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
 //                mapCol++;
 //                Col++;
 //
-//                if (Col == gp.maxScreenCol + 1) {
-//                    mapCol = gp.maxMapCol-1;
+//                if (Col == gp.maxScreenCol - 1) {
+//                    mapCol = gp.maxMapCol;
 //                    Col = -1;
-//                    mapRow++;
+//                    mapRow--;
 //                    Row++;
 //                }
 //            }
-//        } else if ((mapCol > 0 && mapCol < gp.maxMapCol-1) && (mapRow <= 0)) {
+//        }
+//        // Stoping render of up wall
+//        else if ((mapCol > 0 && mapCol < gp.maxMapCol-1) && (mapRow <= 0)) {
 //            mapRow = 0;
 //            while (Col <= gp.maxScreenCol + 1 && Row <= gp.maxScreenRow + 1) {
 //
@@ -213,28 +246,11 @@ public class TileManager {
 //                int screenX = worldX - gp.player.worldX + gp.player.screenX;
 //                int screenY = worldY - gp.player.worldY + gp.player.screenY;
 //
-//                int currentMapNum = mapTileNum[mapRow][mapCol];
-//                g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
-//                mapCol++;
-//                Col++;
-//
-//                if (Col == gp.maxScreenCol + 1) {
-//                    mapCol = (gp.player.worldX - gp.screenWidth / 2) / gp.TileSize;
-//                    Col = -1;
-//                    mapRow++;
-//                    Row++;
+//                if ((mapCol < 0 || mapCol > gp.maxMapCol) || (mapRow < 0 || mapRow > gp.maxMapRow)) {
+//                    currentMapNum = 0;
+//                } else {
+//                    currentMapNum = mapTileNum[mapRow][mapCol];
 //                }
-//            }
-//        } else if ((mapCol > 0 && mapCol < gp.maxMapCol-1) && (mapRow >= gp.maxMapRow)) {
-//            mapRow = gp.maxMapRow-1;
-//            while (Col <= gp.maxScreenCol + 1 && Row <= gp.maxScreenRow + 1) {
-//
-//                int worldX = mapCol * gp.TileSize;
-//                int worldY = mapRow * gp.TileSize;
-//                int screenX = worldX - gp.player.worldX + gp.player.screenX;
-//                int screenY = worldY - gp.player.worldY + gp.player.screenY;
-//
-//                int currentMapNum = mapTileNum[mapRow][mapCol];
 //                g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
 //                mapCol++;
 //                Col++;
@@ -247,6 +263,33 @@ public class TileManager {
 //                }
 //            }
 //        }
-        // TODO: TO wyzej posprawdzaj i ogarnij + mapFromImg zle dziala chyba. Zle sie renderuja bloki tekstur. Mapa sie nie zgadza. Pomysl: i*8 - 1 ale do podszlifowania
+//        // Stoping render of down wall
+//        else if ((mapCol > 0 && mapCol < gp.maxMapCol-1) && (mapRow > gp.maxMapRow)) {
+//            mapRow = gp.maxMapRow;
+//            while (Col <= gp.maxScreenCol + 1 && Row <= gp.maxScreenRow + 1) {
+//
+//                int worldX = mapCol * gp.TileSize;
+//                int worldY = mapRow * gp.TileSize;
+//                int screenX = worldX - gp.player.worldX + gp.player.screenX;
+//                int screenY = worldY - gp.player.worldY + gp.player.screenY;
+//
+//                if ((mapCol <= 0 || mapCol > gp.maxMapCol) || (mapRow <= 0 || mapRow > gp.maxMapRow)) {
+//                    currentMapNum = 0;
+//                } else {
+//                    currentMapNum = mapTileNum[mapRow][mapCol];
+//                }
+//                g2.drawImage(tile[currentMapNum].image, screenX, screenY, gp.TileSize, gp.TileSize, null);
+//                mapCol++;
+//                Col++;
+//
+//                if (Col == gp.maxScreenCol - 2) {
+//                    mapCol = (gp.player.worldX - gp.screenWidth / 2) / gp.TileSize;
+//                    Col = 0;
+//                    mapRow++;
+//                    Row++;
+//                }
+//            }
+//        }
+        // TODO: MapFromImg popraw tak aby wczytywalo tekstury i je obracalo.
     }
 }
